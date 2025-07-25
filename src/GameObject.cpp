@@ -1,5 +1,16 @@
 #include "GameObject.hpp"
 
+void GameObject::SetVelocity(float vx, float vy)
+{
+    this->vx = vx;
+    this->vy = vy;
+}
+
+float GameObject::GetVX() const { return vx; }
+float GameObject::GetVY() const { return vy; }
+
+#include "GameObject.hpp"
+
 /**
  * @brief Constructs a new GameObject at the specified position with the given texture.
  *

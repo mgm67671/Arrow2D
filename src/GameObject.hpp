@@ -19,6 +19,11 @@ class GameObject
         SDL_Texture *GetTexture();
         SDL_FRect GetDestRect() const;
 
+    public:
+        void SetVelocity(float vx, float vy);
+        float GetVX() const;
+        float GetVY() const;
+
     private:
         float x, y;
         float vx, vy;

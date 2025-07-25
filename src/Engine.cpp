@@ -52,7 +52,21 @@ bool Engine::Init(const char* title, int width, int height)
         return false;
     }
 
-    player = new GameObject(100.0f, 100.0f, textureManager->LoadTexture("assets/player.bmp", renderer->GetSDLRenderer()));
+    // Load player texture
+    SDL_Texture* playerTexture = textureManager->LoadTexture("assets/player.bmp", renderer->GetSDLRenderer());
+    if (!playerTexture)
+    {
+        std::cerr << "Failed to load player texture." << std::endl;
+        SDL_DestroyWindow(window);
+        return false;
+    }
+
+    // Center the player in the window (assuming 64x64 sprite size)
+    float playerW = 64.0f;
+    float playerH = 64.0f;
+    float playerX = (width - playerW) / 2.0f;
+    float playerY = (height - playerH) / 2.0f;
+    player = new GameObject(playerX, playerY, playerTexture);
     if (!player)
     {
         std::cerr << "Failed to allocate player object." << std::endl;
@@ -103,7 +117,26 @@ void Engine::Run()
  */
 void Engine::Update()
 {
-    // TODO: Add game update logic here
+    // Movement speed in pixels per second
+    const float speed = 1.0f;
+    float vx = 0.0f, vy = 0.0f;
+
+    // WASD or Arrow keys
+    if (inputManager->IsKeyDown(SDL_SCANCODE_W) || inputManager->IsKeyDown(SDL_SCANCODE_UP))
+        vy -= speed;
+    if (inputManager->IsKeyDown(SDL_SCANCODE_S) || inputManager->IsKeyDown(SDL_SCANCODE_DOWN))
+        vy += speed;
+    if (inputManager->IsKeyDown(SDL_SCANCODE_A) || inputManager->IsKeyDown(SDL_SCANCODE_LEFT))
+        vx -= speed;
+    if (inputManager->IsKeyDown(SDL_SCANCODE_D) || inputManager->IsKeyDown(SDL_SCANCODE_RIGHT))
+        vx += speed;
+
+    // Set player velocity and update position
+    if (player) {
+        player->SetVelocity(vx, vy);
+        // For now, use a fixed dt (e.g., 1/60th second)
+        player->Update(1.0f / 60.0f);
+    }
 }
 
 /**
@@ -125,7 +158,10 @@ void Engine::HandleEvents()
  */
 void Engine::Render()
 {
-    // TODO: Add rendering logic here
+    renderer->Clean();
+    if (player)
+        renderer->Render(*player);
+    renderer->Present();
 }
 
 
