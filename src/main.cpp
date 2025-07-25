@@ -5,7 +5,7 @@ int main()
 {
     Engine& engine = Engine::Instance();
 
-    if (!engine.Init("My Game", 960, 540))
+    if (!engine.Init("My Game", 1440, 810))
     {
         std::cerr << "Failed to initialize the engine." << std::endl;
         return -1;
