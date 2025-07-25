@@ -13,3 +13,7 @@ target_include_directories(Arrow2D PRIVATE src)
 # --- Add these lines for SDL3 via vcpkg ---
 find_package(SDL3 CONFIG REQUIRED)
 target_link_libraries(Arrow2D PRIVATE SDL3::SDL3)
+
+# --- Add these lines for SDL3_ttf via vcpkg ---
+find_package(SDL3_ttf CONFIG REQUIRED)
+target_link_libraries(Arrow2D PRIVATE SDL3_ttf::SDL3_ttf)

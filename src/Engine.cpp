@@ -52,7 +52,7 @@ bool Engine::Init(const char* title, int width, int height)
         return false;
     }
 
-    player = new GameObject(100.0f, 100.0f, textureManager->LoadTexture("../../assets/player.bmp", renderer->GetSDLRenderer()));
+    player = new GameObject(100.0f, 100.0f, textureManager->LoadTexture("assets/player.bmp", renderer->GetSDLRenderer()));
     if (!player)
     {
         std::cerr << "Failed to allocate player object." << std::endl;
