@@ -16,8 +16,6 @@ class TextureManager;
  * run, and clean up the game. It manages subsystems such as rendering, input,
  * and texture management, and provides a singleton interface to ensure only one
  * instance exists throughout the application's lifetime.
- *
- * @note Copy and move operations are deleted to enforce singleton behavior.
  */
 class Engine
 {
@@ -34,7 +32,7 @@ class Engine
         void Clean();
         void Run();
         void HandleEvents();
-        void Update();
+        void Update(double dt);
         void Render();
 
         //Setters

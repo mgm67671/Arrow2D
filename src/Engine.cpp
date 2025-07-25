@@ -4,7 +4,6 @@
 #include "TextureManager.hpp"
 #include "Engine.hpp"
 
-// Singleton instance accessor
 Engine& Engine::Instance()
 {
     static Engine instance;
@@ -52,13 +51,23 @@ bool Engine::Init(const char* title, int width, int height)
         return false;
     }
 
-    // Load player texture
-    SDL_Texture* playerTexture = textureManager->LoadTexture("assets/player.bmp", renderer->GetSDLRenderer());
-    if (!playerTexture)
+    // Load all player textures for animation states
+    std::unordered_map<PlayerAnimState, SDL_Texture*> playerTextures;
+    playerTextures[PlayerAnimState::IdleLeft] = textureManager->LoadTexture("assets/sprites/Player/Left_Idle.bmp", renderer->GetSDLRenderer());
+    playerTextures[PlayerAnimState::IdleRight] = textureManager->LoadTexture("assets/sprites/Player/Right_Idle.bmp", renderer->GetSDLRenderer());
+    playerTextures[PlayerAnimState::WalkLeftA] = textureManager->LoadTexture("assets/sprites/Player/Moving_Left_A.bmp", renderer->GetSDLRenderer());
+    playerTextures[PlayerAnimState::WalkLeftB] = textureManager->LoadTexture("assets/sprites/Player/Moving_Left_B.bmp", renderer->GetSDLRenderer());
+    playerTextures[PlayerAnimState::WalkRightA] = textureManager->LoadTexture("assets/sprites/Player/Moving_Right_A.bmp", renderer->GetSDLRenderer());
+    playerTextures[PlayerAnimState::WalkRightB] = textureManager->LoadTexture("assets/sprites/Player/Moving_Right_B.bmp", renderer->GetSDLRenderer());
+
+    // Check for any missing textures
+    for (const auto& pair : playerTextures) 
     {
-        std::cerr << "Failed to load player texture." << std::endl;
-        SDL_DestroyWindow(window);
-        return false;
+        if (!pair.second) {
+            std::cerr << "Failed to load one or more player textures." << std::endl;
+            SDL_DestroyWindow(window);
+            return false;
+        }
     }
 
     // Center the player in the window (assuming 64x64 sprite size)
@@ -66,7 +75,7 @@ bool Engine::Init(const char* title, int width, int height)
     float playerH = 64.0f;
     float playerX = (width - playerW) / 2.0f;
     float playerY = (height - playerH) / 2.0f;
-    player = new GameObject(playerX, playerY, playerTexture);
+    player = new GameObject(playerX, playerY, playerTextures);
     if (!player)
     {
         std::cerr << "Failed to allocate player object." << std::endl;
@@ -101,24 +110,35 @@ void Engine::Clean()
  */
 void Engine::Run()
 {
+    Uint64 prevTicks = SDL_GetPerformanceCounter();
+    const double freq = (double)SDL_GetPerformanceFrequency();
     while (running)
     {
+        Uint64 currTicks = SDL_GetPerformanceCounter();
+        double dt = (currTicks - prevTicks) / freq;
+        prevTicks = currTicks;
+
         HandleEvents();
-        Update();
+        Update(dt);
         Render();
+        // Optional: Cap frame rate (e.g., to 240 FPS)
+        int FPS = 240;
+        SDL_Delay(std::max(0, (int)(1000.0 / FPS - dt * 1000)));
     }
 }
 
 /**
- * @brief Updates the game state.
+ * @brief Updates the game state based on input and elapsed time.
  *
- * This is a placeholder implementation. You should expand this method
- * to update your game objects and logic as needed.
+ * This function processes input from the user, updates the player's position
+ * and animation state based on the input, and handles movement logic.
+ *
+ * @param dt The time delta since the last update in seconds.
  */
-void Engine::Update()
+void Engine::Update(double dt)
 {
     // Movement speed in pixels per second
-    const float speed = 1.0f;
+    const float speed = 300.0f;
     float vx = 0.0f, vy = 0.0f;
 
     // WASD or Arrow keys
@@ -132,11 +152,14 @@ void Engine::Update()
         vx += speed;
 
     // Set player velocity and update position
-    if (player) 
+    if (player)
     {
         player->SetVelocity(vx, vy);
-        // For now, use a fixed dt (e.g., 1/60th second)
-        player->Update(1.0f / 60.0f);
+        // Determine direction and movement for animation
+        bool moving = (vx != 0.0f || vy != 0.0f);
+        bool facingRight = (vx > 0) || (vx == 0 && (player->GetAnimState() == PlayerAnimState::IdleRight || player->GetAnimState() == PlayerAnimState::WalkRightA || player->GetAnimState() == PlayerAnimState::WalkRightB));
+        player->UpdateAnim(static_cast<float>(dt), moving, facingRight);
+        player->Update(static_cast<float>(dt));
     }
 }
 

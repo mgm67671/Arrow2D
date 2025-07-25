@@ -10,10 +10,8 @@
  * @param y The initial y-coordinate of the GameObject.
  * @param texture Pointer to the SDL_Texture to be used for rendering this GameObject.
  */
-GameObject::GameObject(float x, float y, SDL_Texture *texture) : x(x), y(y), vx(0), vy(0), texture(texture)
-{
-    // Initialize any other necessary variables or states here
-}
+
+GameObject::GameObject(float x, float y, const std::unordered_map<PlayerAnimState, SDL_Texture*>& textures) : x(x), y(y), vx(0), vy(0), textures(textures), animState(PlayerAnimState::IdleLeft), animTimer(0.0f), lastFacingRight(true), wasMoving(false), wasFacingRight(true) {}
 
 /**
  * @brief Updates the position of the game object based on its velocity and the elapsed time.
@@ -37,19 +35,78 @@ void GameObject::Update(float dt)
  */
 void GameObject::Render(SDL_Renderer *renderer)
 {
-    // Render the texture at the object's position
-    SDL_FRect destRect = { x, y, 64.0f, 64.0f }; // Example size
-    SDL_RenderTexture(renderer, texture, nullptr, &destRect);
+    SDL_FRect destRect = { x, y, 64.0f, 64.0f };
+    SDL_Texture* tex = textures.count(animState) ? textures.at(animState) : nullptr;
+    if (tex)
+        SDL_RenderTexture(renderer, tex, nullptr, &destRect);
 }
 
-SDL_Texture *GameObject::GetTexture() { return texture; }
+/**
+ * @brief Updates the animation state of the GameObject based on movement and direction.
+ *
+ * This function manages the animation timer and switches between idle and walking animation states
+ * depending on whether the object is moving and which direction it is facing. It toggles between
+ * animation frames at a fixed interval when moving, and resets the animation state and timer when
+ * the movement state or facing direction changes.
+ *
+ * @param dt Time elapsed since the last update (in seconds).
+ * @param moving Indicates whether the GameObject is currently moving.
+ * @param facingRight Indicates whether the GameObject is facing right (true) or left (false).
+ */
+void GameObject::UpdateAnim(float dt, bool moving, bool facingRight)
+{
+    animTimer += dt;
+    const float animFrameTime = 0.10f;
+    if (!moving)
+    {
+        if (facingRight)
+            animState = PlayerAnimState::IdleRight;
+        else
+            animState = PlayerAnimState::IdleLeft;
+        animTimer = 0.0f;
+    }
+    else
+    {
+        if (!wasMoving || wasFacingRight != facingRight)
+            animTimer = 0.0f; // Reset timer when starting to move or changing direction
+        if (animTimer >= animFrameTime)
+        {
+            // Toggle frame
+            if (facingRight)
+            {
+                if (animState == PlayerAnimState::WalkRightA)
+                    animState = PlayerAnimState::WalkRightB;
+                else
+                    animState = PlayerAnimState::WalkRightA;
+            }
+            else
+            {
+                if (animState == PlayerAnimState::WalkLeftA)
+                    animState = PlayerAnimState::WalkLeftB;
+                else
+                    animState = PlayerAnimState::WalkLeftA;
+            }
+            animTimer = 0.0f;
+        }
+        else
+        {
+            // Keep current frame
+            if (facingRight && (animState != PlayerAnimState::WalkRightA && animState != PlayerAnimState::WalkRightB))
+                animState = PlayerAnimState::WalkRightA;
+            if (!facingRight && (animState != PlayerAnimState::WalkLeftA && animState != PlayerAnimState::WalkLeftB))
+                animState = PlayerAnimState::WalkLeftA;
+        }
+    }
+    lastFacingRight = facingRight;
+    wasMoving = moving;
+    wasFacingRight = facingRight;
+}
 
-SDL_FRect GameObject::GetDestRect() const { return { x, y, 64.0f, 64.0f }; /* Example size, adjust as needed */ }
+SDL_Texture *GameObject::GetTexture() { return textures.count(animState) ? textures.at(animState) : nullptr; }
+SDL_FRect GameObject::GetDestRect() const { return { x, y, 64.0f, 64.0f }; }
 float GameObject::GetVX() const { return vx; }
 float GameObject::GetVY() const { return vy; }
+void GameObject::SetVelocity(float vx, float vy) { this->vx = vx; this->vy = vy; }
 
-void GameObject::SetVelocity(float vx, float vy)
-{
-    this->vx = vx;
-    this->vy = vy;
-}
+void GameObject::SetAnimState(PlayerAnimState state) { animState = state; }
+PlayerAnimState GameObject::GetAnimState() const { return animState; }
