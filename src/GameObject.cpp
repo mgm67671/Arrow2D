@@ -1,58 +1,25 @@
 #include "GameObject.hpp"
 
-/**
- * @brief Constructs a new GameObject at the specified position with the given texture.
- *
- * Initializes the GameObject's position to (x, y), sets the initial velocity (vx, vy) to zero,
- * and assigns the provided SDL_Texture pointer to the texture member.
- *
- * @param x The initial x-coordinate of the GameObject.
- * @param y The initial y-coordinate of the GameObject.
- * @param texture Pointer to the SDL_Texture to be used for rendering this GameObject.
- */
+GameObject::GameObject(float x, float y, const std::unordered_map<AnimState, SDL_Texture*>& textures)
+    : x(x), y(y), vx(0), vy(0), textures(textures), animState(AnimState::IdleLeft), animTimer(0.0f), lastFacingRight(true), wasMoving(false), wasFacingRight(true) {}
 
-GameObject::GameObject(float x, float y, const std::unordered_map<AnimState, SDL_Texture*>& textures) : x(x), y(y), vx(0), vy(0), textures(textures), animState(AnimState::IdleLeft), animTimer(0.0f), lastFacingRight(true), wasMoving(false), wasFacingRight(true) {}
-
-/**
- * @brief Updates the position of the game object based on its velocity and the elapsed time.
- * 
- * @param dt The time delta (in seconds) since the last update.
- * 
- * This function updates the object's internal time delta and increments its
- * position (x, y) according to its velocity (vx, vy) and the elapsed time.
- */
 void GameObject::Update(float dt)
 {
+    // Update position based on velocity and delta time
     this->dt = dt;
     x += vx * dt;
     y += vy * dt;
 }
 
-/**
- * @brief Renders the game object using the specified SDL renderer.
- *
- * @param renderer Pointer to the SDL_Renderer used for drawing the game object.
- */
 void GameObject::Render(SDL_Renderer *renderer)
 {
+    // Render the current animation state's texture at the object's position
     SDL_FRect destRect = { x, y, 64.0f, 64.0f };
     SDL_Texture* tex = textures.count(animState) ? textures.at(animState) : nullptr;
     if (tex)
         SDL_RenderTexture(renderer, tex, nullptr, &destRect);
 }
 
-/**
- * @brief Updates the animation state of the GameObject based on movement and direction.
- *
- * This function manages the animation timer and switches between idle and walking animation states
- * depending on whether the object is moving and which direction it is facing. It toggles between
- * animation frames at a fixed interval when moving, and resets the animation state and timer when
- * the movement state or facing direction changes.
- *
- * @param dt Time elapsed since the last update (in seconds).
- * @param moving Indicates whether the GameObject is currently moving.
- * @param facingRight Indicates whether the GameObject is facing right (true) or left (false).
- */
 void GameObject::UpdateAnim(float dt, bool moving, bool facingRight)
 {
     animTimer += dt;
@@ -102,11 +69,22 @@ void GameObject::UpdateAnim(float dt, bool moving, bool facingRight)
     wasFacingRight = facingRight;
 }
 
-SDL_Texture *GameObject::GetTexture() { return textures.count(animState) ? textures.at(animState) : nullptr; }
+SDL_Texture *GameObject::GetTexture() const 
+{ 
+    // Return the texture for the current animation state, or nullptr if not found
+    auto it = textures.find(animState);
+    return (it != textures.end()) ? it->second : nullptr;
+}
+
 SDL_FRect GameObject::GetDestRect() const { return { x, y, 64.0f, 64.0f }; }
 float GameObject::GetVX() const { return vx; }
+void GameObject::SetVX(float vx) { this->vx = vx; }
 float GameObject::GetVY() const { return vy; }
-void GameObject::SetVelocity(float vx, float vy) { this->vx = vx; this->vy = vy; }
+void GameObject::SetVY(float vy) { this->vy = vy; }
+float GameObject::GetX() const { return x; }
+void GameObject::SetX(float x) { this->x = x; }
+void GameObject::SetY(float y) { this->y = y; }
+float GameObject::GetY() const { return y; }
 
 void GameObject::SetAnimState(AnimState state) { animState = state; }
 AnimState GameObject::GetAnimState() const { return animState; }

@@ -6,15 +6,6 @@ TextureManager& TextureManager::Instance()
     return instance;
 }
 
-/**
- * @brief Loads a texture from the specified file path using the given SDL renderer.
- *
- * This function attempts to load an image file and create an SDL_Texture that can be used for rendering.
- *
- * @param path The file system path to the image file to load.
- * @param renderer The SDL_Renderer to use for creating the texture.
- * @return A pointer to the loaded SDL_Texture, or nullptr if loading fails.
- */
 SDL_Texture *TextureManager::LoadTexture(const std::string &path, SDL_Renderer *renderer)
 {
     // Check if the texture is already cached
@@ -44,12 +35,6 @@ SDL_Texture *TextureManager::LoadTexture(const std::string &path, SDL_Renderer *
     return texture;
 }
 
-/**
- * @brief Releases all loaded textures and cleans up resources managed by the TextureManager.
- *
- * This function should be called to free memory and resources associated with textures
- * before shutting down the application or when textures are no longer needed.
- */
 void TextureManager::Clean()
 {
     for (auto &pair : textureCache)

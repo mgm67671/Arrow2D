@@ -24,6 +24,7 @@ const std::vector<GameObjectDef> TestScene::testSceneObjects =
 
 TestScene::TestScene(Renderer& renderer, TextureManager& textureManager, int winWidth, int winHeight)
 {
+    // Construct objects from the static data array
     for (const auto& def : testSceneObjects)
     {
         if (def.type == "Player")
@@ -31,5 +32,6 @@ TestScene::TestScene(Renderer& renderer, TextureManager& textureManager, int win
             auto player = new Player(def.x, def.y, def.texturePaths, def.speed, &textureManager, renderer.GetSDLRenderer());
             AddObject(player);
         }
+        // Add more object types here as needed
     }
 }

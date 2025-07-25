@@ -8,45 +8,71 @@
 
 /**
  * @class Scene
- * @brief Manages a collection of game objects and coordinates their update and rendering.
+ * @brief Manages a collection of game objects within a scene.
  *
- * The Scene class is responsible for storing, updating, and rendering all game objects
- * that are part of a particular scene (level, menu, etc.). It provides methods to add objects,
- * update their state, and render them using the provided renderer.
+ * The Scene class is responsible for storing, updating, animating, and rendering
+ * a set of GameObject instances. It takes ownership of the added game objects,
+ * ensuring their proper lifetime management. The scene provides interfaces to
+ * add objects, update their state, update their animations, and render them
+ * using a provided Renderer.
+ *
+ * @note The Scene class deletes all owned game objects upon destruction.
  */
 class Scene
 {
     public:
+        
         /**
          * @brief Adds a game object to the scene.
-         * @param obj Pointer to the GameObject to add. Scene takes ownership.
+         *
+         * This function takes a pointer to a GameObject and adds it to the scene's collection
+         * of objects. The scene takes ownership of the object and is responsible for managing
+         * its lifetime.
+         *
+         * @param obj Pointer to the GameObject to be added to the scene.
          */
         void AddObject(GameObject* obj);
-
+        
         /**
-         * @brief Updates all game objects in the scene.
-         * @param dt Time delta since last update (in seconds).
+         * @brief Updates the scene state.
+         * 
+         * This method should be called every frame to update the scene's logic,
+         * animations, and other time-dependent elements.
+         * 
+         * @param dt The time elapsed since the last update, in seconds.
          */
         void Update(float dt);
 
+        
         /**
-         * @brief Updates animation state for all game objects in the scene.
-         * @param dt Time delta since last update (in seconds).
+         * @brief Updates the animation state of the object.
+         * 
+         * This function advances the animation based on the elapsed time.
+         * 
+         * @param dt The time delta in seconds since the last update.
          */
         void UpdateAnim(float dt);
 
+    
         /**
-         * @brief Renders all game objects in the scene using the provided renderer.
-         * @param renderer Reference to the Renderer.
+         * @brief Renders the scene using the provided renderer.
+         * 
+         * This function draws all scene elements by utilizing the specified Renderer instance.
+         * 
+         * @param renderer Reference to the Renderer object responsible for drawing the scene.
          */
         void Render(Renderer& renderer);
 
+    
         /**
-         * @brief Destructor. Cleans up all game objects owned by the scene.
+         * @brief Virtual destructor for the Scene class.
+         *
+         * Ensures proper cleanup of resources in derived classes when a Scene object is deleted.
          */
-        ~Scene();
-    private:
-        std::vector<GameObject*> objects; ///< All game objects in the scene.
+        virtual ~Scene();
+
+    protected:
+        std::vector<GameObject*> objects; // Owned game objects
 };
 
 #endif // SCENE_HPP

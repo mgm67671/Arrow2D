@@ -1,4 +1,6 @@
-#pragma once
+#ifndef GAME_CONFIG_HPP
+#define GAME_CONFIG_HPP
+
 #include <SDL3/SDL.h>
 
 // Window settings
@@ -19,3 +21,5 @@ constexpr SDL_Scancode KEY_UP_ALT     = SDL_SCANCODE_UP;
 constexpr SDL_Scancode KEY_DOWN_ALT   = SDL_SCANCODE_DOWN;
 constexpr SDL_Scancode KEY_LEFT_ALT   = SDL_SCANCODE_LEFT;
 constexpr SDL_Scancode KEY_RIGHT_ALT  = SDL_SCANCODE_RIGHT;
+
+#endif // GAME_CONFIG_HPP
