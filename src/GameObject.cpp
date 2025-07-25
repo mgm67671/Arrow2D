@@ -11,7 +11,7 @@
  * @param texture Pointer to the SDL_Texture to be used for rendering this GameObject.
  */
 
-GameObject::GameObject(float x, float y, const std::unordered_map<PlayerAnimState, SDL_Texture*>& textures) : x(x), y(y), vx(0), vy(0), textures(textures), animState(PlayerAnimState::IdleLeft), animTimer(0.0f), lastFacingRight(true), wasMoving(false), wasFacingRight(true) {}
+GameObject::GameObject(float x, float y, const std::unordered_map<AnimState, SDL_Texture*>& textures) : x(x), y(y), vx(0), vy(0), textures(textures), animState(AnimState::IdleLeft), animTimer(0.0f), lastFacingRight(true), wasMoving(false), wasFacingRight(true) {}
 
 /**
  * @brief Updates the position of the game object based on its velocity and the elapsed time.
@@ -60,9 +60,9 @@ void GameObject::UpdateAnim(float dt, bool moving, bool facingRight)
     if (!moving)
     {
         if (facingRight)
-            animState = PlayerAnimState::IdleRight;
+            animState = AnimState::IdleRight;
         else
-            animState = PlayerAnimState::IdleLeft;
+            animState = AnimState::IdleLeft;
         animTimer = 0.0f;
     }
     else
@@ -74,27 +74,27 @@ void GameObject::UpdateAnim(float dt, bool moving, bool facingRight)
             // Toggle frame
             if (facingRight)
             {
-                if (animState == PlayerAnimState::WalkRightA)
-                    animState = PlayerAnimState::WalkRightB;
+                if (animState == AnimState::WalkRightA)
+                    animState = AnimState::WalkRightB;
                 else
-                    animState = PlayerAnimState::WalkRightA;
+                    animState = AnimState::WalkRightA;
             }
             else
             {
-                if (animState == PlayerAnimState::WalkLeftA)
-                    animState = PlayerAnimState::WalkLeftB;
+                if (animState == AnimState::WalkLeftA)
+                    animState = AnimState::WalkLeftB;
                 else
-                    animState = PlayerAnimState::WalkLeftA;
+                    animState = AnimState::WalkLeftA;
             }
             animTimer = 0.0f;
         }
         else
         {
             // Keep current frame
-            if (facingRight && (animState != PlayerAnimState::WalkRightA && animState != PlayerAnimState::WalkRightB))
-                animState = PlayerAnimState::WalkRightA;
-            if (!facingRight && (animState != PlayerAnimState::WalkLeftA && animState != PlayerAnimState::WalkLeftB))
-                animState = PlayerAnimState::WalkLeftA;
+            if (facingRight && (animState != AnimState::WalkRightA && animState != AnimState::WalkRightB))
+                animState = AnimState::WalkRightA;
+            if (!facingRight && (animState != AnimState::WalkLeftA && animState != AnimState::WalkLeftB))
+                animState = AnimState::WalkLeftA;
         }
     }
     lastFacingRight = facingRight;
@@ -108,5 +108,5 @@ float GameObject::GetVX() const { return vx; }
 float GameObject::GetVY() const { return vy; }
 void GameObject::SetVelocity(float vx, float vy) { this->vx = vx; this->vy = vy; }
 
-void GameObject::SetAnimState(PlayerAnimState state) { animState = state; }
-PlayerAnimState GameObject::GetAnimState() const { return animState; }
+void GameObject::SetAnimState(AnimState state) { animState = state; }
+AnimState GameObject::GetAnimState() const { return animState; }

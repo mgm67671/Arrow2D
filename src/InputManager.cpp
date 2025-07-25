@@ -1,4 +1,5 @@
 #include "InputManager.hpp"
+#include "GameConfig.hpp"
 
 InputManager& InputManager::Instance() 
 {
@@ -37,5 +38,23 @@ void InputManager::ProcessInput()
 bool InputManager::IsKeyDown(SDL_Scancode key)
 {
     const bool* state = SDL_GetKeyboardState(NULL);
-    return state != nullptr && state[key];
+    bool pressed = state != nullptr && state[key];
+    return pressed;
+}
+
+void InputManager::GetMovementVector(float& vx, float& vy, float speed)
+{
+    vx = 0.0f;
+    vy = 0.0f;
+    if (IsKeyDown(KEY_MOVE_UP)    || IsKeyDown(KEY_UP_ALT))    vy -= 1.0f;
+    if (IsKeyDown(KEY_MOVE_DOWN)  || IsKeyDown(KEY_DOWN_ALT))  vy += 1.0f;
+    if (IsKeyDown(KEY_MOVE_LEFT)  || IsKeyDown(KEY_LEFT_ALT))  vx -= 1.0f;
+    if (IsKeyDown(KEY_MOVE_RIGHT) || IsKeyDown(KEY_RIGHT_ALT)) vx += 1.0f;
+    // Normalize
+    float len = sqrtf(vx * vx + vy * vy);
+    if (len > 0.0f) 
+    {
+        vx = (vx / len) * speed;
+        vy = (vy / len) * speed;
+    }
 }

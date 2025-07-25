@@ -56,3 +56,4 @@ void TextureManager::Clean()
         SDL_DestroyTexture(pair.second);
     textureCache.clear();
 }
+

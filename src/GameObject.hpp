@@ -14,35 +14,48 @@
  * including its position, velocity, rendering, and texture management.
  */
 
-enum class PlayerAnimState { IdleLeft, IdleRight, WalkLeftA, WalkLeftB, WalkRightA, WalkRightB };
+/**
+ * @enum AnimState
+ * @brief Represents animation states for any game object.
+ */
+enum class AnimState { IdleLeft, IdleRight, WalkLeftA, WalkLeftB, WalkRightA, WalkRightB };
 
 class GameObject
 {
-public:
-    GameObject(float x, float y, const std::unordered_map<PlayerAnimState, SDL_Texture*>& textures);
-    void Update(float dt);
-    void Render(SDL_Renderer *renderer);
-    SDL_Texture *GetTexture();
-    SDL_FRect GetDestRect() const;
+    public:
+        GameObject(float x, float y, const std::unordered_map<AnimState, SDL_Texture*>& textures);
+        virtual void Update(float dt);
+        void Render(SDL_Renderer *renderer);
+        SDL_Texture *GetTexture();
+        SDL_FRect GetDestRect() const;
 
-    void SetVelocity(float vx, float vy);
-    float GetVX() const;
-    float GetVY() const;
+        // Position
+        void SetPosition(float x, float y);
+        float GetX() const;
+        float GetY() const;
 
-    void SetAnimState(PlayerAnimState state);
-    PlayerAnimState GetAnimState() const;
-    void UpdateAnim(float dt, bool moving, bool facingRight);
+        // Velocity
+        void SetVelocity(float vx, float vy);
+        float GetVX() const;
+        float GetVY() const;
 
-private:
-    float x, y;
-    float vx, vy;
-    float dt; // Delta time for movement
-    std::unordered_map<PlayerAnimState, SDL_Texture*> textures;
-    PlayerAnimState animState;
-    float animTimer = 0.0f;
-    bool lastFacingRight = true;
-    bool wasMoving = false;
-    bool wasFacingRight = true;
+        // Animation state
+        void SetAnimState(AnimState state);
+        AnimState GetAnimState() const;
+        virtual void UpdateAnim(float dt, bool moving, bool facingRight);
+
+    protected:
+        std::unordered_map<AnimState, SDL_Texture*> textures;
+        AnimState animState;
+        
+    private:
+        float x, y;
+        float vx, vy;
+        float dt; // Delta time for movement
+        float animTimer = 0.0f;
+        bool lastFacingRight = true;
+        bool wasMoving = false;
+        bool wasFacingRight = true;
 };
 
 #endif // GAMEOBJECT_HPP

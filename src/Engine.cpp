@@ -3,6 +3,8 @@
 #include "InputManager.hpp"
 #include "TextureManager.hpp"
 #include "Engine.hpp"
+#include "TestScene.hpp"
+#include "GameConfig.hpp"
 
 Engine& Engine::Instance()
 {
@@ -23,27 +25,30 @@ Engine& Engine::Instance()
  */
 bool Engine::Init(const char* title, int width, int height)
 {
-    this->title = title;
-    this->width = width;
-    this->height = height;
+    this->title = WINDOW_TITLE;
+    this->width = WINDOW_WIDTH;
+    this->height = WINDOW_HEIGHT;
 
     // Use singleton subsystems
     renderer = &Renderer::Instance();
     inputManager = &InputManager::Instance();
     textureManager = &TextureManager::Instance();
-    if (!renderer || !inputManager || !textureManager)
+    if (!inputManager)
     {
-        std::cerr << "Failed to initialize a core subsystem." << std::endl;
+        std::cerr << "Failed to initialize input manager subsystem." << std::endl;
         return false;
     }
-
-    SDL_Window* window = SDL_CreateWindow(title, width, height, 0);
+    if (!textureManager)
+    {
+        std::cerr << "Failed to initialize texture manager subsystem." << std::endl;
+        return false;
+    }
+    SDL_Window* window = SDL_CreateWindow(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     if (!window)
     {
         std::cerr << "Failed to create SDL_Window: " << SDL_GetError() << std::endl;
         return false;
     }
-
     if (!renderer->Init(window))
     {
         std::cerr << "Failed to initialize renderer." << std::endl;
@@ -51,37 +56,8 @@ bool Engine::Init(const char* title, int width, int height)
         return false;
     }
 
-    // Load all player textures for animation states
-    std::unordered_map<PlayerAnimState, SDL_Texture*> playerTextures;
-    playerTextures[PlayerAnimState::IdleLeft] = textureManager->LoadTexture("assets/sprites/Player/Left_Idle.bmp", renderer->GetSDLRenderer());
-    playerTextures[PlayerAnimState::IdleRight] = textureManager->LoadTexture("assets/sprites/Player/Right_Idle.bmp", renderer->GetSDLRenderer());
-    playerTextures[PlayerAnimState::WalkLeftA] = textureManager->LoadTexture("assets/sprites/Player/Moving_Left_A.bmp", renderer->GetSDLRenderer());
-    playerTextures[PlayerAnimState::WalkLeftB] = textureManager->LoadTexture("assets/sprites/Player/Moving_Left_B.bmp", renderer->GetSDLRenderer());
-    playerTextures[PlayerAnimState::WalkRightA] = textureManager->LoadTexture("assets/sprites/Player/Moving_Right_A.bmp", renderer->GetSDLRenderer());
-    playerTextures[PlayerAnimState::WalkRightB] = textureManager->LoadTexture("assets/sprites/Player/Moving_Right_B.bmp", renderer->GetSDLRenderer());
-
-    // Check for any missing textures
-    for (const auto& pair : playerTextures) 
-    {
-        if (!pair.second) {
-            std::cerr << "Failed to load one or more player textures." << std::endl;
-            SDL_DestroyWindow(window);
-            return false;
-        }
-    }
-
-    // Center the player in the window (assuming 64x64 sprite size)
-    float playerW = 64.0f;
-    float playerH = 64.0f;
-    float playerX = (width - playerW) / 2.0f;
-    float playerY = (height - playerH) / 2.0f;
-    player = new GameObject(playerX, playerY, playerTextures);
-    if (!player)
-    {
-        std::cerr << "Failed to allocate player object." << std::endl;
-        SDL_DestroyWindow(window);
-        return false;
-    }
+    // Create test scene
+    scene = new TestScene(*renderer, *textureManager, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     running = true;
     Run();
@@ -98,7 +74,7 @@ bool Engine::Init(const char* title, int width, int height)
  */
 void Engine::Clean()
 {
-    delete player;
+    delete scene;
 }
 
 /**
@@ -121,8 +97,6 @@ void Engine::Run()
         HandleEvents();
         Update(dt);
         Render();
-        // Optional: Cap frame rate (e.g., to 240 FPS)
-        int FPS = 240;
         SDL_Delay(std::max(0, (int)(1000.0 / FPS - dt * 1000)));
     }
 }
@@ -137,37 +111,16 @@ void Engine::Run()
  */
 void Engine::Update(double dt)
 {
-    // Movement speed in pixels per second
-    const float speed = 300.0f;
-    float vx = 0.0f, vy = 0.0f;
-
-    // WASD or Arrow keys
-    if (inputManager->IsKeyDown(SDL_SCANCODE_W) || inputManager->IsKeyDown(SDL_SCANCODE_UP))
-        vy -= speed;
-    if (inputManager->IsKeyDown(SDL_SCANCODE_S) || inputManager->IsKeyDown(SDL_SCANCODE_DOWN))
-        vy += speed;
-    if (inputManager->IsKeyDown(SDL_SCANCODE_A) || inputManager->IsKeyDown(SDL_SCANCODE_LEFT))
-        vx -= speed;
-    if (inputManager->IsKeyDown(SDL_SCANCODE_D) || inputManager->IsKeyDown(SDL_SCANCODE_RIGHT))
-        vx += speed;
-
-    // Set player velocity and update position
-    if (player)
-    {
-        player->SetVelocity(vx, vy);
-        // Determine direction and movement for animation
-        bool moving = (vx != 0.0f || vy != 0.0f);
-        bool facingRight = (vx > 0) || (vx == 0 && (player->GetAnimState() == PlayerAnimState::IdleRight || player->GetAnimState() == PlayerAnimState::WalkRightA || player->GetAnimState() == PlayerAnimState::WalkRightB));
-        player->UpdateAnim(static_cast<float>(dt), moving, facingRight);
-        player->Update(static_cast<float>(dt));
-    }
+    if (scene)
+        scene->Update(static_cast<float>(dt));
 }
 
 /**
- * @brief Handles input events and updates the running state.
+ * @brief Handles input events and updates the input manager state.
  *
- * This is a placeholder implementation. You should expand this method
- * to process actual input events as needed for your application.
+ * This function processes all pending SDL events, such as keyboard and mouse input,
+ * and updates the input manager's state accordingly. It also checks for quit events
+ * to allow the engine to exit gracefully.
  */
 void Engine::HandleEvents()
 {
@@ -175,16 +128,16 @@ void Engine::HandleEvents()
 }
 
 /**
- * @brief Renders the current game scene.
+ * @brief Renders the current scene using the renderer.
  *
- * This is a placeholder implementation. You should expand this method
- * to render your game objects as needed.
+ * This function clears the renderer, renders all game objects in the scene,
+ * and presents the rendered frame to the screen.
  */
 void Engine::Render()
 {
     renderer->Clean();
-    if (player)
-        renderer->Render(*player);
+    if (scene)
+        scene->Render(*renderer);
     renderer->Present();
 }
 

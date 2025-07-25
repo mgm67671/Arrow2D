@@ -7,6 +7,8 @@ class InputManager;
 class TextureManager;
 
 #include "GameObject.hpp"
+#include "Scene.hpp"
+
 
 /**
  * @class Engine
@@ -50,6 +52,7 @@ class Engine
         InputManager *inputManager;
         TextureManager *textureManager;
         GameObject *player;
+        Scene *scene;
 };
 
 #endif // ENGINE_HPP

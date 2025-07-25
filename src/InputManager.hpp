@@ -18,6 +18,7 @@ class InputManager
         void Update();
         void ProcessInput();
         bool IsKeyDown(SDL_Scancode key);
+        void GetMovementVector(float& vx, float& vy, float speed);
     private:
         InputManager() = default;
         InputManager(const InputManager&) = delete;
