@@ -1,5 +1,11 @@
 #include "InputManager.hpp"
 
+InputManager& InputManager::Instance() 
+{
+    static InputManager instance;
+    return instance;
+}
+
 /// @brief Updates the input manager state each frame.
 /// Call this function once per frame to process input events and update internal states.
 void InputManager::Update()
@@ -15,9 +21,7 @@ void InputManager::ProcessInput()
     while (SDL_PollEvent(&event))
     {
         if (event.type == SDL_EVENT_QUIT)
-        {
             Engine::Instance().SetRunning(false);
-        }
     }
 }
 
@@ -34,9 +38,4 @@ bool InputManager::IsKeyDown(SDL_Scancode key)
 {
     const bool* state = SDL_GetKeyboardState(NULL);
     return state != nullptr && state[key];
-}
-
-InputManager& InputManager::Instance() {
-    static InputManager instance;
-    return instance;
 }

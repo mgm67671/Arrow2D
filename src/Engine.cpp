@@ -132,7 +132,8 @@ void Engine::Update()
         vx += speed;
 
     // Set player velocity and update position
-    if (player) {
+    if (player) 
+    {
         player->SetVelocity(vx, vy);
         // For now, use a fixed dt (e.g., 1/60th second)
         player->Update(1.0f / 60.0f);
@@ -163,10 +164,6 @@ void Engine::Render()
         renderer->Render(*player);
     renderer->Present();
 }
-
-
-//Setters
-
 
 void Engine::SetRunning(bool state)
 {

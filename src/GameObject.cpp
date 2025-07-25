@@ -1,16 +1,5 @@
 #include "GameObject.hpp"
 
-void GameObject::SetVelocity(float vx, float vy)
-{
-    this->vx = vx;
-    this->vy = vy;
-}
-
-float GameObject::GetVX() const { return vx; }
-float GameObject::GetVY() const { return vy; }
-
-#include "GameObject.hpp"
-
 /**
  * @brief Constructs a new GameObject at the specified position with the given texture.
  *
@@ -53,12 +42,14 @@ void GameObject::Render(SDL_Renderer *renderer)
     SDL_RenderTexture(renderer, texture, nullptr, &destRect);
 }
 
-SDL_Texture *GameObject::GetTexture()
-{
-    return texture;
-}
+SDL_Texture *GameObject::GetTexture() { return texture; }
 
-SDL_FRect GameObject::GetDestRect() const
+SDL_FRect GameObject::GetDestRect() const { return { x, y, 64.0f, 64.0f }; /* Example size, adjust as needed */ }
+float GameObject::GetVX() const { return vx; }
+float GameObject::GetVY() const { return vy; }
+
+void GameObject::SetVelocity(float vx, float vy)
 {
-    return { x, y, 64.0f, 64.0f }; // Example size, adjust as needed
+    this->vx = vx;
+    this->vy = vy;
 }

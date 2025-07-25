@@ -2,6 +2,38 @@
 #include <SDL3/SDL.h>
 #include <iostream>
 
+Renderer& Renderer::Instance() 
+{
+    static Renderer instance;
+    return instance;
+}
+
+/**
+ * @brief Initializes the SDL renderer for the game window.
+ *
+ * This method creates the SDL_Renderer using the provided SDL_Window pointer.
+ * It must be called before any rendering or texture loading occurs.
+ *
+ * @param window The SDL_Window to associate with the renderer.
+ * @return true if the renderer was created successfully, false otherwise.
+ */
+bool Renderer::Init(SDL_Window *window)
+{
+    if (sdlRenderer)
+    {
+        SDL_DestroyRenderer(sdlRenderer);
+        sdlRenderer = nullptr;
+    }
+    
+    sdlRenderer = SDL_CreateRenderer(window, NULL);
+    if (!sdlRenderer)
+    {
+        std::cerr << "Failed to create SDL_Renderer: " << SDL_GetError() << std::endl;
+        return false;
+    }
+    return true;
+}
+
 /// @brief Clears the current rendering target using the renderer.
 /// 
 /// This function clears the entire rendering target to the preset draw color,
@@ -47,35 +79,4 @@ void Renderer::Present()
 SDL_Renderer *Renderer::GetSDLRenderer() const
 {
     return sdlRenderer;
-}
-
-/**
- * @brief Initializes the SDL renderer for the game window.
- *
- * This method creates the SDL_Renderer using the provided SDL_Window pointer.
- * It must be called before any rendering or texture loading occurs.
- *
- * @param window The SDL_Window to associate with the renderer.
- * @return true if the renderer was created successfully, false otherwise.
- */
-bool Renderer::Init(SDL_Window *window)
-{
-    if (sdlRenderer)
-    {
-        SDL_DestroyRenderer(sdlRenderer);
-        sdlRenderer = nullptr;
-    }
-    
-    sdlRenderer = SDL_CreateRenderer(window, NULL);
-    if (!sdlRenderer)
-    {
-        std::cerr << "Failed to create SDL_Renderer: " << SDL_GetError() << std::endl;
-        return false;
-    }
-    return true;
-}
-
-Renderer& Renderer::Instance() {
-    static Renderer instance;
-    return instance;
 }

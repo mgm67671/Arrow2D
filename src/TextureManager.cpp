@@ -1,5 +1,11 @@
 #include "TextureManager.hpp"
 
+TextureManager& TextureManager::Instance() 
+{
+    static TextureManager instance;
+    return instance;
+}
+
 /**
  * @brief Loads a texture from the specified file path using the given SDL renderer.
  *
@@ -14,9 +20,7 @@ SDL_Texture *TextureManager::LoadTexture(const std::string &path, SDL_Renderer *
     // Check if the texture is already cached
     auto it = textureCache.find(path);
     if (it != textureCache.end())
-    {
         return it->second;
-    }
 
     // Load the texture from file
     SDL_Surface *surface = SDL_LoadBMP(path.c_str());
@@ -49,13 +53,6 @@ SDL_Texture *TextureManager::LoadTexture(const std::string &path, SDL_Renderer *
 void TextureManager::Clean()
 {
     for (auto &pair : textureCache)
-    {
         SDL_DestroyTexture(pair.second);
-    }
     textureCache.clear();
-}
-
-TextureManager& TextureManager::Instance() {
-    static TextureManager instance;
-    return instance;
 }
