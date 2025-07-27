@@ -10,6 +10,7 @@
    Open PowerShell and run:
    ```powershell
    & "C:\Program Files\vcpkg\vcpkg.exe" install sdl3:x64-windows
+   & "C:\Program Files\vcpkg\vcpkg.exe" install sdl3-ttf:x64-windows
    & "C:\Program Files\vcpkg\vcpkg.exe" integrate install
    ```
 

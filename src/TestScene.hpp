@@ -18,7 +18,6 @@ struct GameObjectDef
     std::string type; // Object type (e.g., "Player")
     float x, y; // Initial position
     std::unordered_map<AnimState, std::string> texturePaths; // Animation state to texture path
-    float speed = 0.0f; // Movement speed (for Player)
 };
 
 /**

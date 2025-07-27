@@ -22,6 +22,7 @@ bool Engine::Init(const char* title, int width, int height)
     renderer = &Renderer::Instance();
     inputManager = &InputManager::Instance();
     textureManager = &TextureManager::Instance();
+    SDL_Window* window = SDL_CreateWindow(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     if (!inputManager)
     {
         std::cerr << "Failed to initialize input manager subsystem." << std::endl;
@@ -32,7 +33,6 @@ bool Engine::Init(const char* title, int width, int height)
         std::cerr << "Failed to initialize texture manager subsystem." << std::endl;
         return false;
     }
-    SDL_Window* window = SDL_CreateWindow(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     if (!window)
     {
         std::cerr << "Failed to create SDL_Window: " << SDL_GetError() << std::endl;
