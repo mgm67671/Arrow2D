@@ -1,7 +1,7 @@
 #include "GameObject.hpp"
 
 GameObject::GameObject(float x, float y, const std::unordered_map<AnimState, SDL_Texture*>& textures)
-    : x(x), y(y), vx(0), vy(0), textures(textures), animState(AnimState::IdleLeft), animTimer(0.0f), lastFacingRight(true), wasMoving(false), wasFacingRight(true) {}
+    : x(x), y(y), vx(0), vy(0), textures(textures), animState(AnimState::IdleLeft), animTimer(0.0f), wasFacingRight(true), wasMoving(false) {}
 
 void GameObject::Update(float dt)
 {
@@ -64,7 +64,6 @@ void GameObject::UpdateAnim(float dt, bool moving, bool facingRight)
                 animState = AnimState::WalkLeftA;
         }
     }
-    lastFacingRight = facingRight;
     wasMoving = moving;
     wasFacingRight = facingRight;
 }

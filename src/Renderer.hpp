@@ -79,6 +79,9 @@ class Renderer
          * Initializes a Renderer object with default settings.
          */
         Renderer() = default;
+
+        /// Pointer to the SDL_Renderer used for rendering graphics to the window.
+        /// This renderer is responsible for all 2D drawing operations in the application.
         SDL_Renderer *sdlRenderer;
 };
 

@@ -146,7 +146,15 @@ class GameObject
         virtual void UpdateAnim(float dt, bool moving, bool facingRight);
 
     protected:
+        /// @brief Maps animation states to their corresponding SDL textures.
+        /// 
+        /// This unordered_map associates each AnimState (representing a specific animation state)
+        /// with a pointer to an SDL_Texture, allowing efficient retrieval of the correct texture
+        /// for rendering based on the current animation state.
         std::unordered_map<AnimState, SDL_Texture*> textures;
+
+        /// @brief Represents the current animation state of the game object.
+        /// Used to control and track which animation is active for this object.
         AnimState animState;
 
     private:
@@ -154,7 +162,6 @@ class GameObject
         float vx, vy;
         float dt; // Delta time for movement
         float animTimer = 0.0f;
-        bool lastFacingRight = true;
         bool wasMoving = false;
         bool wasFacingRight = true;
 };

@@ -57,6 +57,9 @@ class TextureManager
          * This constructor does not perform any specific initialization logic.
          */
         TextureManager() = default;
+        
+        /// @brief A cache that maps texture file names (as strings) to their corresponding SDL_Texture pointers.
+        ///        This allows for efficient reuse and management of loaded textures within the application.
         std::unordered_map<std::string, SDL_Texture *> textureCache; 
 };
 

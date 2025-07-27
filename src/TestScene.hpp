@@ -17,7 +17,13 @@ struct GameObjectDef
 {
     std::string type; // Object type (e.g., "Player")
     float x, y; // Initial position
-    std::unordered_map<AnimState, std::string> texturePaths; // Animation state to texture path
+
+    /// @brief Maps each animation state to its corresponding texture file path.
+    /// @details
+    /// This unordered_map associates an AnimState (representing a specific animation state)
+    /// with a std::string containing the file path to the texture used for that state.
+    /// It enables efficient retrieval of texture resources based on the current animation state.
+    std::unordered_map<AnimState, std::string> texturePaths; 
 };
 
 /**
@@ -48,6 +54,13 @@ class TestScene : public Scene
         ~TestScene() = default;
 
     private:
+        /**
+         * @brief A static constant vector containing definitions of game objects for the test scene.
+         *
+         * This vector holds instances of GameObjectDef, each representing the configuration
+         * and properties of a game object to be included in the test scene. It is intended
+         * to be used for initializing or referencing the objects present in the scene.
+         */
         static const std::vector<GameObjectDef> testSceneObjects;
 };
 
