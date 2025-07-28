@@ -1,8 +1,8 @@
 
 #include "TestScene.hpp"
-#include "TextureManager.hpp"
+#include "../TextureManager.hpp"
 #include <iostream>
-#include "GameConfig.hpp"
+#include "../GameConfig.hpp"
 
 // Data-driven scene definition
 const std::vector<GameObjectDef> TestScene::testSceneObjects = 

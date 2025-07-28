@@ -3,7 +3,7 @@
 #include "InputManager.hpp"
 #include "TextureManager.hpp"
 #include "Engine.hpp"
-#include "TestScene.hpp"
+#include "Scenes/TestScene.hpp"
 #include "GameConfig.hpp"
 
 Engine& Engine::Instance()

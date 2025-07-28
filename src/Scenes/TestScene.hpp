@@ -1,7 +1,7 @@
 #ifndef TEST_SCENE_HPP
 #define TEST_SCENE_HPP
 
-#include "Scene.hpp"
+#include "../Scene.hpp"
 #include "Player.hpp"
 #include <memory>
 #include <vector>
