@@ -10,7 +10,9 @@ constexpr int WINDOW_HEIGHT = 540;
 constexpr int FPS_LIMIT = 240;
 
 // Player settings
-constexpr float PLAYER_SPEED = 300.0f;
+constexpr float PLAYER_SPEED = 300.0f; // Speed in pixels per second
+constexpr float PLAYER_HOR_SIZE = 64.0f; // Horizontal size of the player sprite
+constexpr float PLAYER_VER_SIZE = PLAYER_HOR_SIZE; // Vertical size of the player sprite
 
 // Key mapping for movement (customizable)
 constexpr SDL_Scancode KEY_MOVE_UP    = SDL_SCANCODE_W;

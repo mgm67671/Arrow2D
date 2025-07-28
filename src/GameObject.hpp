@@ -58,7 +58,7 @@ class GameObject
          * 
          * @param renderer Pointer to the SDL_Renderer used for drawing the object.
          */
-        void Render(SDL_Renderer *renderer);
+        void Render(SDL_Renderer *renderer, float offsetX = 0.0f, float offsetY = 0.0f);
 
         /**
          * @brief Returns the texture for the current animation state, or nullptr if not found.

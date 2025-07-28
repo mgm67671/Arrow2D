@@ -44,7 +44,7 @@ class Renderer
          *
          * @param obj Reference to the GameObject to be rendered.
          */
-        void Render(GameObject &obj);
+        void Render(GameObject &obj, float offsetX = 0.0f, float offsetY = 0.0f);
 
         /**
          * @brief Presents the current rendering on the screen.

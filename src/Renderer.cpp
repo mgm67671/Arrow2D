@@ -30,10 +30,13 @@ void Renderer::Clean()
     SDL_RenderClear(sdlRenderer);
 }
 
-void Renderer::Render(GameObject &obj)
+void Renderer::Render(GameObject &obj, float offsetX, float offsetY)
 {
-    // Render the GameObject using the SDL renderer
-    SDL_RenderTexture(sdlRenderer, obj.GetTexture(), NULL, &obj.GetDestRect());
+    // Render the GameObject using the SDL renderer, applying camera offset
+    SDL_FRect dest = obj.GetDestRect();
+    dest.x -= offsetX;
+    dest.y -= offsetY;
+    SDL_RenderTexture(sdlRenderer, obj.GetTexture(), NULL, &dest);
 }
 
 void Renderer::Present()
