@@ -15,7 +15,9 @@ void GameObject::Render(SDL_Renderer *renderer)
 {
     // Render the current animation state's texture at the object's position
     SDL_FRect destRect = { x, y, 64.0f, 64.0f };
-    SDL_Texture* tex = textures.count(animState) ? textures.at(animState) : nullptr;
+    SDL_Texture* tex = nullptr;
+    if (textures.count(animState))
+        tex = textures.at(animState);
     if (tex)
         SDL_RenderTexture(renderer, tex, nullptr, &destRect);
 }
@@ -72,7 +74,9 @@ SDL_Texture *GameObject::GetTexture() const
 { 
     // Return the texture for the current animation state, or nullptr if not found
     auto it = textures.find(animState);
-    return (it != textures.end()) ? it->second : nullptr;
+    if (it == textures.end())
+        return nullptr;
+    return it->second;
 }
 
 SDL_FRect GameObject::GetDestRect() const { return { x, y, 64.0f, 64.0f }; }
