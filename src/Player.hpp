@@ -39,7 +39,7 @@ class Player : public GameObject
          * @param textureManager Pointer to the TextureManager.
          * @param renderer SDL_Renderer to use for loading textures.
          */
-        Player(float x, float y, const std::unordered_map<AnimState, std::string>& texturePaths, float speed, TextureManager* textureManager, SDL_Renderer* renderer);
+        Player(float x, float y, float width, float height, const std::unordered_map<AnimState, std::string>& texturePaths, TextureManager* textureManager, SDL_Renderer* renderer);
 
         /**
          * @brief Virtual destructor for safe polymorphic deletion.

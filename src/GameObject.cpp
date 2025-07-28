@@ -1,8 +1,8 @@
 #include "GameObject.hpp"
 #include "GameConfig.hpp"
 
-GameObject::GameObject(float x, float y, const std::unordered_map<AnimState, SDL_Texture*>& textures)
-    : x(x), y(y), vx(0), vy(0), textures(textures), animState(AnimState::IdleLeft), animTimer(0.0f), wasFacingRight(true), wasMoving(false) {}
+GameObject::GameObject(float x, float y, float width, float height, const std::unordered_map<AnimState, SDL_Texture*>& textures)
+    : x(x), y(y), width(width), height(height), vx(0), vy(0), textures(textures), animState(AnimState::IdleLeft), animTimer(0.0f), wasFacingRight(true), wasMoving(false) {}
 
 void GameObject::Update(float dt)
 {
@@ -15,7 +15,7 @@ void GameObject::Update(float dt)
 void GameObject::Render(SDL_Renderer *renderer, float offsetX, float offsetY)
 {
     // Render the current animation state's texture at the object's position, applying camera offset
-    SDL_FRect destRect = { x - offsetX, y - offsetY, PLAYER_HOR_SIZE, PLAYER_VER_SIZE };
+    SDL_FRect destRect = { x - offsetX, y - offsetY, width, height };
     SDL_Texture* tex = nullptr;
     if (textures.count(animState))
         tex = textures.at(animState);
@@ -80,7 +80,10 @@ SDL_Texture *GameObject::GetTexture() const
     return it->second;
 }
 
-SDL_FRect GameObject::GetDestRect() const { return { x, y, PLAYER_HOR_SIZE, PLAYER_VER_SIZE }; }
+SDL_FRect GameObject::GetDestRect() const { return { x, y, width, height }; }
+
+float GameObject::GetWidth() const { return width; }
+float GameObject::GetHeight() const { return height; }
 float GameObject::GetVX() const { return vx; }
 float GameObject::GetVY() const { return vy; }
 float GameObject::GetX() const { return x; }

@@ -42,7 +42,7 @@ class GameObject
          * @param y The y-coordinate of the GameObject's position.
          * @param textures A map associating each AnimState with its corresponding SDL_Texture pointer.
          */
-        GameObject(float x, float y, const std::unordered_map<AnimState, SDL_Texture*>& textures);
+        GameObject(float x, float y, float width, float height, const std::unordered_map<AnimState, SDL_Texture*>& textures);
 
         /**
          * @brief Updates the game object each frame.
@@ -68,6 +68,16 @@ class GameObject
          * @return SDL_FRect representing the object's position and size.
          */
         SDL_FRect GetDestRect() const;
+
+        /**
+         * @brief Gets the object's width.
+         */
+        float GetWidth() const;
+
+        /**
+         * @brief Gets the object's height.
+         */
+        float GetHeight() const;
 
         /**
          * @brief Sets the object's X position.
@@ -156,6 +166,7 @@ class GameObject
 
     private:
         float x, y;
+        float width, height;
         float vx, vy;
         float dt; // Delta time for movement
         float animTimer = 0.0f;

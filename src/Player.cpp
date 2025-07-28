@@ -1,9 +1,10 @@
 #include "Player.hpp"
 #include "TextureManager.hpp"
+#include "GameConfig.hpp"
 #include <cmath>
 
-Player::Player(float x, float y, const std::unordered_map<AnimState, std::string>& texturePaths, float speed, TextureManager* textureManager, SDL_Renderer* renderer)
-    : GameObject(x, y, {}), speed(speed)
+Player::Player(float x, float y, float width, float height, const std::unordered_map<AnimState, std::string>& texturePaths, TextureManager* textureManager, SDL_Renderer* renderer)
+    : GameObject(x, y, width, height, {}), speed(PLAYER_SPEED)
 {
     // Load textures for each animation state from file paths
     std::unordered_map<AnimState, SDL_Texture*> loadedTextures;
