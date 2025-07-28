@@ -7,7 +7,7 @@
 constexpr const char* WINDOW_TITLE = "Arrow2D";
 constexpr int WINDOW_WIDTH = 960;
 constexpr int WINDOW_HEIGHT = 540;
-constexpr int FPS = 240;
+constexpr int FPS_LIMIT = 240;
 
 // Player settings
 constexpr float PLAYER_SPEED = 300.0f;

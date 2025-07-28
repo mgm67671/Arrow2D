@@ -130,7 +130,7 @@ class GameObject
          * @brief Gets the object's animation state.
          */
         AnimState GetAnimState() const;
-        
+
         /**
          * @brief Updates the animation state of the GameObject based on movement and direction.
          *

@@ -22,7 +22,7 @@ bool Engine::Init(const char* title, int width, int height)
     renderer = &Renderer::Instance();
     inputManager = &InputManager::Instance();
     textureManager = &TextureManager::Instance();
-    SDL_Window* window = SDL_CreateWindow(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+    SDL_Window* window = SDL_CreateWindow(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE);
     if (!inputManager)
     {
         std::cerr << "Failed to initialize input manager subsystem." << std::endl;
@@ -72,7 +72,7 @@ void Engine::Run()
         HandleEvents();
         Update(dt);
         Render();
-        SDL_Delay(std::max(0, (int)(1000.0 / FPS - dt * 1000)));
+        SDL_Delay(std::max(0, (int)(1000.0 / FPS_LIMIT - dt * 1000)));
     }
 }
 
