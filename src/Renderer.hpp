@@ -4,7 +4,6 @@
 #include <SDL3/SDL.h>
 #include "GameObject.hpp"
 
-
 /**
  * @class Renderer
  * @brief Singleton class responsible for managing all 2D rendering operations using SDL.

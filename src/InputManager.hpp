@@ -4,7 +4,6 @@
 #include <SDL3/SDL.h>
 #include "Engine.hpp"
 
-
 /**
  * @class InputManager
  * @brief Singleton class responsible for handling input events and state.

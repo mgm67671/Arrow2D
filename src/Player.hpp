@@ -30,7 +30,6 @@
 class Player : public GameObject 
 {
     public:
-
         /**
          * @brief Constructs a Player object at the specified position, loads its textures, and sets speed.
          * @param x Initial x-coordinate.
@@ -46,7 +45,6 @@ class Player : public GameObject
          * @brief Virtual destructor for safe polymorphic deletion.
          */
         virtual ~Player() = default;
-
         
         /**
          * @brief Updates the player's state.
@@ -57,7 +55,6 @@ class Player : public GameObject
          * @param dt The time elapsed since the last update (delta time), in seconds.
          */
         void Update(float dt) override;
-
         
         /**
          * @brief Handles player input and updates player state accordingly.
@@ -70,7 +67,6 @@ class Player : public GameObject
          */
         void HandleInput(InputManager& input, float dt);
 
-        
         /**
          * @brief Updates the player's animation state.
          *

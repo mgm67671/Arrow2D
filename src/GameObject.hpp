@@ -1,7 +1,6 @@
 #ifndef GAMEOBJECT_HPP
 #define GAMEOBJECT_HPP
 
-
 #include <SDL3/SDL.h>
 #include <unordered_map>
 #include <string>

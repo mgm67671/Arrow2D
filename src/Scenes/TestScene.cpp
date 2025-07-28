@@ -9,7 +9,7 @@ const std::vector<GameObjectDef> TestScene::testSceneObjects =
 {
     {
         "Player",
-        (WINDOW_WIDTH / 2) - 32, (WINDOW_HEIGHT / 2) - 32, // Example centered position for 960x540 window
+        (WINDOW_WIDTH / 2) - PLAYER_HOR_SIZE, (WINDOW_HEIGHT / 2) - PLAYER_VER_SIZE,
         {
             {AnimState::IdleLeft,   "assets/sprites/Player/Left_Idle.bmp"},
             {AnimState::IdleRight,  "assets/sprites/Player/Right_Idle.bmp"},
@@ -17,7 +17,8 @@ const std::vector<GameObjectDef> TestScene::testSceneObjects =
             {AnimState::WalkLeftB,  "assets/sprites/Player/Moving_Left_B.bmp"},
             {AnimState::WalkRightA, "assets/sprites/Player/Moving_Right_A.bmp"},
             {AnimState::WalkRightB, "assets/sprites/Player/Moving_Right_B.bmp"}
-        }
+        },
+        PLAYER_SPEED // speed
     }
 };
 

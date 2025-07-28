@@ -24,6 +24,7 @@ struct GameObjectDef
     /// with a std::string containing the file path to the texture used for that state.
     /// It enables efficient retrieval of texture resources based on the current animation state.
     std::unordered_map<AnimState, std::string> texturePaths; 
+    float speed; // Movement speed (for Player)
 };
 
 /**

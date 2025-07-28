@@ -19,6 +19,7 @@ void Player::Update(float dt)
     HandleInput(input, dt);
     GameObject::Update(dt);
 }
+
 void Player::HandleInput(InputManager& inputManager, float dt)
 {
     float vx, vy;

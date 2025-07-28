@@ -7,10 +7,11 @@
 constexpr const char* WINDOW_TITLE = "Arrow2D";
 constexpr int WINDOW_WIDTH = 960;
 constexpr int WINDOW_HEIGHT = 540;
+constexpr SDL_WindowFlags WINDOW_FLAGS = SDL_WINDOW_RESIZABLE;
 constexpr int FPS_LIMIT = 240;
 
 // Player settings
-constexpr float PLAYER_SPEED = 300.0f; // Speed in pixels per second
+constexpr float PLAYER_SPEED = 350.0f; // Speed in pixels per second
 constexpr float PLAYER_HOR_SIZE = 64.0f; // Horizontal size of the player sprite
 constexpr float PLAYER_VER_SIZE = PLAYER_HOR_SIZE; // Vertical size of the player sprite
 
