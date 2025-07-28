@@ -12,8 +12,6 @@
  */
 enum class AnimState { IdleLeft, IdleRight, WalkLeftA, WalkLeftB, WalkRightA, WalkRightB };
 
-
-
 /**
  * @class GameObject
  * @brief Represents a basic game object with position, velocity, and animation state.

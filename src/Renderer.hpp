@@ -38,11 +38,14 @@ class Renderer
         void Clean();
 
         /**
-         * @brief Renders the specified game object.
+         * @brief Renders the specified game object at a given offset (for camera).
          *
-         * This function handles the rendering logic for the provided GameObject instance.
+         * This function handles the rendering logic for the provided GameObject instance,
+         * applying a camera offset so the player can be centered and the world moves behind.
          *
          * @param obj Reference to the GameObject to be rendered.
+         * @param offsetX Horizontal offset to apply (camera X).
+         * @param offsetY Vertical offset to apply (camera Y).
          */
         void Render(GameObject &obj, float offsetX = 0.0f, float offsetY = 0.0f);
 

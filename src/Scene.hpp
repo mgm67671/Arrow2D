@@ -55,10 +55,12 @@ class Scene
 
     
         /**
-         * @brief Renders the scene using the provided renderer.
-         * 
+         * @brief Renders the scene using the provided renderer, centering the player.
+         *
          * This function draws all scene elements by utilizing the specified Renderer instance.
-         * 
+         * The player is always rendered at the center of the window, and all other objects
+         * are offset accordingly to create a camera-follow effect.
+         *
          * @param renderer Reference to the Renderer object responsible for drawing the scene.
          */
         void Render(Renderer& renderer);
