@@ -81,13 +81,13 @@ SDL_Texture *GameObject::GetTexture() const
 
 SDL_FRect GameObject::GetDestRect() const { return { x, y, 64.0f, 64.0f }; }
 float GameObject::GetVX() const { return vx; }
-void GameObject::SetVX(float vx) { this->vx = vx; }
 float GameObject::GetVY() const { return vy; }
-void GameObject::SetVY(float vy) { this->vy = vy; }
 float GameObject::GetX() const { return x; }
+float GameObject::GetY() const { return y; }
+AnimState GameObject::GetAnimState() const { return animState; }
+
+void GameObject::SetVX(float vx) { this->vx = vx; }
+void GameObject::SetVY(float vy) { this->vy = vy; }
 void GameObject::SetX(float x) { this->x = x; }
 void GameObject::SetY(float y) { this->y = y; }
-float GameObject::GetY() const { return y; }
-
 void GameObject::SetAnimState(AnimState state) { animState = state; }
-AnimState GameObject::GetAnimState() const { return animState; }
