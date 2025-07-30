@@ -24,7 +24,7 @@ const std::vector<GameObjectDef> TestScene::testSceneObjects =
     {
         "NPC",
         100.0f, 100.0f,
-        64.0f, 64.0f, // Example size for NPC
+        44.0f, 66.0f, // Example size for NPC
         {
             {AnimState::IdleLeft,   "assets/sprites/Player/Left_Idle.bmp"},
             {AnimState::IdleRight,  "assets/sprites/Player/Right_Idle.bmp"},

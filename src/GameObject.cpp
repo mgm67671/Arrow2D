@@ -2,14 +2,15 @@
 #include "GameConfig.hpp"
 
 GameObject::GameObject(float x, float y, float width, float height, const std::unordered_map<AnimState, SDL_Texture*>& textures)
-    : x(x), y(y), width(width), height(height), vx(0), vy(0), textures(textures), animState(AnimState::IdleLeft), animTimer(0.0f), wasFacingRight(true), wasMoving(false) {}
+    : x(x), y(y), width(width), height(height), vx(0), vy(0), textures(textures), animState(AnimState::IdleLeft), animTimer(0.0f), wasFacingRight(true), wasMoving(false)
+{
+    hitbox = {x, y, width, height};
+}
 
 void GameObject::Update(float dt)
 {
-    // Update position based on velocity and delta time
+    // Only update per-frame logic (animation, timers, etc.)
     this->dt = dt;
-    x += vx * dt;
-    y += vy * dt;
 }
 
 void GameObject::Render(SDL_Renderer *renderer, float offsetX, float offsetY)
@@ -80,6 +81,17 @@ SDL_Texture *GameObject::GetTexture() const
     return it->second;
 }
 
+bool GameObject::Intersects(const GameObject& other) const 
+{
+    return Intersects(this->hitbox, other.hitbox);
+}
+
+bool GameObject::Intersects(const SDL_FRect& a, const SDL_FRect& b) 
+{
+    return (a.x < b.x + b.w && a.x + a.w > b.x &&
+            a.y < b.y + b.h && a.y + a.h > b.y);
+}
+
 SDL_FRect GameObject::GetDestRect() const { return { x, y, width, height }; }
 
 float GameObject::GetWidth() const { return width; }
@@ -88,10 +100,12 @@ float GameObject::GetVX() const { return vx; }
 float GameObject::GetVY() const { return vy; }
 float GameObject::GetX() const { return x; }
 float GameObject::GetY() const { return y; }
+SDL_FRect GameObject::GetHitbox() const { return hitbox; }
 AnimState GameObject::GetAnimState() const { return animState; }
 
 void GameObject::SetVX(float vx) { this->vx = vx; }
 void GameObject::SetVY(float vy) { this->vy = vy; }
 void GameObject::SetX(float x) { this->x = x; }
 void GameObject::SetY(float y) { this->y = y; }
+void GameObject::SetHitbox(const SDL_FRect& rect) { hitbox = rect; }
 void GameObject::SetAnimState(AnimState state) { animState = state; }

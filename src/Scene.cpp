@@ -11,9 +11,52 @@ void Scene::AddObject(GameObject* obj)
 
 void Scene::Update(float dt)
 {
-    // Update all game objects in the scene
-    for (auto obj : objects)
-        obj->Update(dt);
+    // Update all game objects in the scene with per-axis collision checks
+    for (auto obj : objects) 
+    {
+        // Check X movement
+        float tryX = obj->GetX() + obj->GetVX() * dt;
+        SDL_FRect hitboxX = obj->GetHitbox();
+        hitboxX.x = tryX;
+        bool collisionX = false;
+        for (auto other : objects) 
+        {
+            if (other == obj) 
+                continue;
+            if (GameObject::Intersects(hitboxX, other->GetHitbox())) 
+            {
+                collisionX = true;
+                break;
+            }
+        }
+        if (!collisionX)
+            obj->SetX(tryX);
+
+        // Check Y movement
+        float tryY = obj->GetY() + obj->GetVY() * dt;
+        SDL_FRect hitboxY = obj->GetHitbox();
+        hitboxY.y = tryY;
+        bool collisionY = false;
+        for (auto other : objects) 
+        {
+            if (other == obj) continue;
+            if (GameObject::Intersects(hitboxY, other->GetHitbox())) 
+            {
+                collisionY = true;
+                break;
+            }
+        }
+        if (!collisionY)
+            obj->SetY(tryY);
+
+        // Update hitbox to new position
+        SDL_FRect newHitbox = obj->GetHitbox();
+        newHitbox.x = obj->GetX();
+        newHitbox.y = obj->GetY();
+        obj->SetHitbox(newHitbox);
+
+        obj->Update(dt); // update everything else (including animation)
+    }
 }
 
 void Scene::UpdateAnim(float dt)

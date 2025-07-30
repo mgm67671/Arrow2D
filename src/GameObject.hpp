@@ -36,6 +36,29 @@ class GameObject
 {
     public:
         /**
+         * @brief Checks if this object's hitbox intersects with another object's hitbox.
+         * @param other The other GameObject to check collision against.
+         * @return True if hitboxes intersect, false otherwise.
+         */
+        bool Intersects(const GameObject& other) const;
+
+        /**
+         * @brief Static utility to check intersection between two SDL_FRect rectangles.
+         */
+        static bool Intersects(const SDL_FRect& a, const SDL_FRect& b);
+
+        /**
+         * @brief Gets the object's hitbox rectangle (for collision detection).
+         * @return SDL_FRect representing the hitbox.
+         */
+        SDL_FRect GetHitbox() const;
+
+        /**
+         * @brief Sets the object's hitbox rectangle.
+         * @param rect The new hitbox rectangle.
+         */
+        void SetHitbox(const SDL_FRect& rect);
+        /**
          * @brief Constructs a GameObject at the specified position with associated textures for animation states.
          * 
          * @param x The x-coordinate of the GameObject's position.
@@ -167,6 +190,7 @@ class GameObject
     private:
         float x, y;
         float width, height;
+        SDL_FRect hitbox; // Collision rectangle
         float vx, vy;
         float dt; // Delta time for movement
         float animTimer = 0.0f;
