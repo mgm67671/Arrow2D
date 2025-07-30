@@ -44,7 +44,4 @@ void Renderer::Present()
     SDL_RenderPresent(sdlRenderer);
 }
 
-SDL_Renderer *Renderer::GetSDLRenderer() const
-{
-    return sdlRenderer;
-}
+SDL_Renderer *Renderer::GetSDLRenderer() const { return sdlRenderer; }

@@ -37,13 +37,7 @@ void Player::UpdateAnim(float dt, bool moving, bool facingRight)
     GameObject::UpdateAnim(dt, moving, facingRight);
 }
 
-void Player::SetSpeed(float s)
-{
-    speed = s;
-}
+void Player::SetSpeed(float s) { speed = s; }
 
-float Player::GetSpeed() const
-{
-    return speed;
-}
+float Player::GetSpeed() const { return speed; }
 

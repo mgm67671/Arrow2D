@@ -21,7 +21,6 @@
 class Scene
 {
     public:
-        
         /**
          * @brief Adds a game object to the scene.
          *
@@ -33,13 +32,21 @@ class Scene
          */
         void AddObject(GameObject* obj);
         
+       
         /**
          * @brief Updates the scene state.
          * 
-         * This method should be called every frame to update the scene's logic,
-         * animations, and other time-dependent elements.
+         * This function should be called every frame to update the scene logic.
          * 
          * @param dt The time elapsed since the last update, in seconds.
+         */
+        /**
+         * @brief Updates the scene state based on the elapsed time.
+         *
+         * This function should be called once per frame to advance the simulation,
+         * animate objects, process physics, or handle any time-dependent logic.
+         *
+         * @param dt The time elapsed since the last update call, in seconds.
          */
         void Update(float dt);
 
@@ -52,7 +59,6 @@ class Scene
          * @param dt The time delta in seconds since the last update.
          */
         void UpdateAnim(float dt);
-
     
         /**
          * @brief Renders the scene using the provided renderer, centering the player.
@@ -64,7 +70,6 @@ class Scene
          * @param renderer Reference to the Renderer object responsible for drawing the scene.
          */
         void Render(Renderer& renderer);
-
     
         /**
          * @brief Virtual destructor for the Scene class.
